@@ -1,0 +1,48 @@
+{
+  "engine": "saga",
+  "mode": "QuestPath",
+  "metadata": {
+    "title": "Ancient Civilizations",
+    "subject": "History",
+    "grade": 9,
+    "author": "Team XYZ"
+  },
+  "theme": "adventure",
+  "mechanics": {
+    "timer": true,
+    "lives": 3,
+    "adaptiveDifficulty": true,
+    "messageBus": true,
+    "streakBonus": true,
+    "scoreMultiplier": 1.5
+  },
+  "content": {
+    "questions": [
+      {
+        "id": 1,
+        "question": "Who built the Pyramids?",
+        "options": ["Egyptians", "Romans", "Greeks", "Aztecs"],
+        "answer": "Egyptians",
+        "points": 10,
+        "timeLimit": 30,
+        "difficulty": "easy",
+        "hint": "Think: the Nile river valley."
+      },
+      {
+        "id": 2,
+        "question": "Which river was central to Egyptian civilization?",
+        "options": ["Nile", "Amazon", "Ganges", "Mississippi"],
+        "answer": "Nile",
+        "points": 10,
+        "timeLimit": 30,
+        "difficulty": "easy",
+        "hint": "The longest river in Africa."
+      }
+    ]
+  },
+  "gameModes": [
+    { "name": "QuestPath",   "bestFor": "History, Science chapters" },
+    { "name": "NeuronRush",  "bestFor": "Revision, Recall" },
+    { "name": "MirrorMatch", "bestFor": "Vocabulary, Definitions" }
+  ]
+}
