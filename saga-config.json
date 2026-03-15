@@ -1,15 +1,16 @@
 {
   "engine": "saga",
-  "mode": "QuestPath",
+  "mode": "NeuronRush",
   "metadata": {
     "title": "Ancient Civilizations",
     "subject": "History",
     "grade": 9,
-    "author": "Team XYZ"
+    "author": "Team Mitrujoy"
   },
   "theme": "adventure",
   "mechanics": {
     "timer": true,
+    "timerSeconds": 30,
     "lives": 3,
     "adaptiveDifficulty": true,
     "messageBus": true,
@@ -20,23 +21,53 @@
     "questions": [
       {
         "id": 1,
-        "question": "Who built the Pyramids?",
-        "options": ["Egyptians", "Romans", "Greeks", "Aztecs"],
+        "question": "Who built the Pyramids of Giza?",
+        "options": ["Romans", "Egyptians", "Greeks", "Aztecs"],
         "answer": "Egyptians",
         "points": 10,
         "timeLimit": 30,
         "difficulty": "easy",
-        "hint": "Think: the Nile river valley."
+        "hint": "Think: the Nile delta."
       },
       {
         "id": 2,
         "question": "Which river was central to Egyptian civilization?",
-        "options": ["Nile", "Amazon", "Ganges", "Mississippi"],
+        "options": ["Amazon", "Ganges", "Nile", "Mississippi"],
         "answer": "Nile",
         "points": 10,
         "timeLimit": 30,
         "difficulty": "easy",
         "hint": "The longest river in Africa."
+      },
+      {
+        "id": 3,
+        "question": "What writing system did ancient Egyptians use?",
+        "options": ["Cuneiform", "Latin", "Sanskrit", "Hieroglyphics"],
+        "answer": "Hieroglyphics",
+        "points": 15,
+        "timeLimit": 25,
+        "difficulty": "medium",
+        "hint": "Picture symbols carved on stone."
+      },
+      {
+        "id": 4,
+        "question": "Which ancient wonder stood in Alexandria?",
+        "options": ["The Colosseum", "The Lighthouse", "The Parthenon", "The Sphinx"],
+        "answer": "The Lighthouse",
+        "points": 15,
+        "timeLimit": 25,
+        "difficulty": "medium",
+        "hint": "It guided ships at sea."
+      },
+      {
+        "id": 5,
+        "question": "Who was the first female Pharaoh of Egypt?",
+        "options": ["Cleopatra", "Nefertiti", "Isis", "Hatshepsut"],
+        "answer": "Hatshepsut",
+        "points": 20,
+        "timeLimit": 20,
+        "difficulty": "hard",
+        "hint": "She ruled during the 18th dynasty."
       }
     ]
   },
