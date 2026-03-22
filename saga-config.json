@@ -2,12 +2,12 @@
   "engine": "saga",
   "mode": "NeuronRush",
   "metadata": {
-    "title": "Ancient Civilizations",
-    "subject": "History",
+    "title": "SAGA Engine",
+    "subject": "Multi-Subject",
     "grade": 9,
     "author": "Team Mitrujoy"
   },
-  "theme": "adventure",
+  "theme": "space",
   "mechanics": {
     "timer": true,
     "timerSeconds": 30,
@@ -17,63 +17,171 @@
     "streakBonus": true,
     "scoreMultiplier": 1.5
   },
+  "subjects": {
+    "History": {
+      "title": "Ancient Civilizations",
+      "icon": "🏛️",
+      "questions": [
+        { "id":1, "question":"Who built the Pyramids of Giza?", "options":["Romans","Egyptians","Greeks","Aztecs"], "answer":"Egyptians", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Think: the Nile delta." },
+        { "id":2, "question":"Which river was central to Egyptian civilization?", "options":["Amazon","Ganges","Nile","Mississippi"], "answer":"Nile", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"The longest river in Africa." },
+        { "id":3, "question":"What writing system did ancient Egyptians use?", "options":["Cuneiform","Latin","Sanskrit","Hieroglyphics"], "answer":"Hieroglyphics", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Picture symbols carved on stone." },
+        { "id":4, "question":"Which ancient wonder stood in Alexandria?", "options":["The Colosseum","The Lighthouse","The Parthenon","The Sphinx"], "answer":"The Lighthouse", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"It guided ships at sea." },
+        { "id":5, "question":"Who was the first female Pharaoh of Egypt?", "options":["Cleopatra","Nefertiti","Isis","Hatshepsut"], "answer":"Hatshepsut", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"She ruled during the 18th dynasty." },
+        { "id":6, "question":"Which empire was ruled by Julius Caesar?", "options":["Greek","Ottoman","Roman","Persian"], "answer":"Roman", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Think: Rome." },
+        { "id":7, "question":"The Great Wall of China was built to protect against which group?", "options":["Mongols","Persians","Vikings","Romans"], "answer":"Mongols", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Nomadic warriors from the north." },
+        { "id":8, "question":"Which civilization built Machu Picchu?", "options":["Aztec","Maya","Inca","Olmec"], "answer":"Inca", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"High in the Andes mountains of Peru." }
+      ],
+      "nodes": [
+        { "id":1, "title":"Launch Pad", "story":"Your spacecraft is ready. Prove your knowledge of ancient civilizations!", "question":"Who built the Pyramids of Giza?", "options":["Romans","Egyptians","Greeks","Aztecs"], "answer":"Egyptians", "points":10, "hint":"Think: the Nile delta.", "unlocks":"Orbit Station" },
+        { "id":2, "title":"Orbit Station", "story":"You've reached orbit! Which river powered Egyptian civilization?", "question":"Which river was central to Egyptian civilization?", "options":["Amazon","Ganges","Nile","Mississippi"], "answer":"Nile", "points":10, "hint":"The longest river in Africa.", "unlocks":"Moon Base" },
+        { "id":3, "title":"Moon Base", "story":"Ancient messages are carved on the walls here — but what language?", "question":"What writing system did ancient Egyptians use?", "options":["Cuneiform","Latin","Sanskrit","Hieroglyphics"], "answer":"Hieroglyphics", "points":15, "hint":"Picture symbols.", "unlocks":"Asteroid Belt" },
+        { "id":4, "title":"Asteroid Belt", "story":"A signal leads you to a wonder of the ancient world...", "question":"Which ancient wonder stood in Alexandria?", "options":["The Colosseum","The Lighthouse","The Parthenon","The Sphinx"], "answer":"The Lighthouse", "points":15, "hint":"It guided ships.", "unlocks":"Deep Space" },
+        { "id":5, "title":"Deep Space", "story":"Final frontier! One last question stands between you and the stars...", "question":"Who was the first female Pharaoh of Egypt?", "options":["Cleopatra","Nefertiti","Isis","Hatshepsut"], "answer":"Hatshepsut", "points":20, "hint":"She ruled in the 18th dynasty.", "unlocks":"Victory" }
+      ],
+      "pairs": [
+        { "term":"Pharaoh",       "definition":"Ruler of ancient Egypt" },
+        { "term":"Pyramid",       "definition":"Massive stone tomb for royalty" },
+        { "term":"Nile",          "definition":"River that powered Egyptian farming" },
+        { "term":"Hieroglyphics", "definition":"Picture-based Egyptian writing" },
+        { "term":"Sphinx",        "definition":"Lion-body statue with human head" },
+        { "term":"Mummy",         "definition":"Preserved body wrapped in cloth" },
+        { "term":"Papyrus",       "definition":"Ancient Egyptian paper from reeds" },
+        { "term":"Hatshepsut",    "definition":"First female Pharaoh of Egypt" }
+      ]
+    },
+    "Science": {
+      "title": "Science Explorer",
+      "icon": "🔬",
+      "questions": [
+        { "id":1, "question":"What is the chemical symbol for water?", "options":["WA","H2O","HO2","W2O"], "answer":"H2O", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Hydrogen and Oxygen." },
+        { "id":2, "question":"How many bones are in the adult human body?", "options":["196","206","216","226"], "answer":"206", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Just over 200." },
+        { "id":3, "question":"What planet is known as the Red Planet?", "options":["Venus","Jupiter","Mars","Saturn"], "answer":"Mars", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Fourth planet from the sun." },
+        { "id":4, "question":"What is the powerhouse of the cell?", "options":["Nucleus","Ribosome","Mitochondria","Vacuole"], "answer":"Mitochondria", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Produces energy for the cell." },
+        { "id":5, "question":"What is the speed of light in km/s?", "options":["200,000","300,000","400,000","500,000"], "answer":"300,000", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Approximately 3 × 10^8 m/s." },
+        { "id":6, "question":"Which gas do plants absorb during photosynthesis?", "options":["Oxygen","Nitrogen","Carbon Dioxide","Hydrogen"], "answer":"Carbon Dioxide", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"The gas we exhale." },
+        { "id":7, "question":"What is the atomic number of Carbon?", "options":["4","6","8","12"], "answer":"6", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"Check the periodic table — second row." },
+        { "id":8, "question":"Which scientist formulated the law of gravity?", "options":["Einstein","Darwin","Newton","Curie"], "answer":"Newton", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"An apple fell on his head." }
+      ],
+      "nodes": [
+        { "id":1, "title":"Lab Entry", "story":"Welcome to the science lab! First test: basic chemistry.", "question":"What is the chemical symbol for water?", "options":["WA","H2O","HO2","W2O"], "answer":"H2O", "points":10, "hint":"Hydrogen and Oxygen.", "unlocks":"Biology Wing" },
+        { "id":2, "title":"Biology Wing", "story":"Into the biology section. How well do you know the human body?", "question":"How many bones are in the adult human body?", "options":["196","206","216","226"], "answer":"206", "points":10, "hint":"Just over 200.", "unlocks":"Astronomy Deck" },
+        { "id":3, "title":"Astronomy Deck", "story":"Looking up at the stars! Which planet glows red?", "question":"What planet is known as the Red Planet?", "options":["Venus","Jupiter","Mars","Saturn"], "answer":"Mars", "points":10, "hint":"Fourth from the sun.", "unlocks":"Cell Lab" },
+        { "id":4, "title":"Cell Lab", "story":"Under the microscope! What powers the cell?", "question":"What is the powerhouse of the cell?", "options":["Nucleus","Ribosome","Mitochondria","Vacuole"], "answer":"Mitochondria", "points":15, "hint":"Produces energy.", "unlocks":"Physics Arena" },
+        { "id":5, "title":"Physics Arena", "story":"Final challenge — the ultimate physics question!", "question":"Which scientist formulated the law of gravity?", "options":["Einstein","Darwin","Newton","Curie"], "answer":"Newton", "points":10, "hint":"An apple fell on his head.", "unlocks":"Victory" }
+      ],
+      "pairs": [
+        { "term":"Mitochondria", "definition":"Powerhouse of the cell" },
+        { "term":"Photosynthesis","definition":"Plants making food from sunlight" },
+        { "term":"Nucleus",      "definition":"Control centre of the cell" },
+        { "term":"Gravity",      "definition":"Force that pulls objects together" },
+        { "term":"Atom",         "definition":"Smallest unit of an element" },
+        { "term":"DNA",          "definition":"Carries genetic information" },
+        { "term":"Ecosystem",    "definition":"Community of living organisms" },
+        { "term":"Newton",       "definition":"Scientist who discovered gravity" }
+      ]
+    },
+    "Mathematics": {
+      "title": "Maths Challenge",
+      "icon": "📐",
+      "questions": [
+        { "id":1, "question":"What is 15 × 12?", "options":["160","170","180","190"], "answer":"180", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"15 × 10 = 150, then add 30." },
+        { "id":2, "question":"What is the square root of 144?", "options":["10","11","12","13"], "answer":"12", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"12 × 12 = ?" },
+        { "id":3, "question":"What is the value of π (pi) to 2 decimal places?", "options":["3.12","3.14","3.16","3.18"], "answer":"3.14", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Circumference ÷ diameter." },
+        { "id":4, "question":"If a triangle has angles 60° and 80°, what is the third angle?", "options":["30°","40°","50°","60°"], "answer":"40°", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Angles in a triangle add up to 180°." },
+        { "id":5, "question":"What is 25% of 200?", "options":["25","40","50","75"], "answer":"50", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"25% = 1/4." },
+        { "id":6, "question":"What is the area of a circle with radius 7? (π=3.14)", "options":["43.96","153.86","144","154"], "answer":"153.86", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"Area = π × r²." },
+        { "id":7, "question":"Solve: 3x + 6 = 21. What is x?", "options":["3","4","5","6"], "answer":"5", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Subtract 6 first, then divide by 3." },
+        { "id":8, "question":"What is the LCM of 4 and 6?", "options":["8","10","12","24"], "answer":"12", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Lowest Common Multiple." }
+      ],
+      "nodes": [
+        { "id":1, "title":"Number Base", "story":"Welcome to the Maths galaxy! Start with multiplication.", "question":"What is 15 × 12?", "options":["160","170","180","190"], "answer":"180", "points":10, "hint":"15×10=150, add 30.", "unlocks":"Root Station" },
+        { "id":2, "title":"Root Station", "story":"Square roots ahead! Can you crack this?", "question":"What is the square root of 144?", "options":["10","11","12","13"], "answer":"12", "points":10, "hint":"12 × 12 = ?", "unlocks":"Pi Planet" },
+        { "id":3, "title":"Pi Planet", "story":"The planet shaped like a circle! What is pi?", "question":"What is the value of π to 2 decimal places?", "options":["3.12","3.14","3.16","3.18"], "answer":"3.14", "points":10, "hint":"Circumference ÷ diameter.", "unlocks":"Algebra Asteroid" },
+        { "id":4, "title":"Algebra Asteroid", "story":"Solve the equation to pass through the asteroid field!", "question":"Solve: 3x + 6 = 21. What is x?", "options":["3","4","5","6"], "answer":"5", "points":15, "hint":"Subtract 6, divide by 3.", "unlocks":"Final Frontier" },
+        { "id":5, "title":"Final Frontier", "story":"Last maths challenge — geometry awaits!", "question":"What is 25% of 200?", "options":["25","40","50","75"], "answer":"50", "points":10, "hint":"25% = 1/4.", "unlocks":"Victory" }
+      ],
+      "pairs": [
+        { "term":"Hypotenuse",  "definition":"Longest side of a right triangle" },
+        { "term":"Pi (π)",      "definition":"Ratio of circumference to diameter" },
+        { "term":"Prime Number","definition":"Only divisible by 1 and itself" },
+        { "term":"Numerator",   "definition":"Top number of a fraction" },
+        { "term":"Denominator", "definition":"Bottom number of a fraction" },
+        { "term":"Perimeter",   "definition":"Total distance around a shape" },
+        { "term":"Area",        "definition":"Space inside a 2D shape" },
+        { "term":"LCM",         "definition":"Lowest Common Multiple" }
+      ]
+    },
+    "English": {
+      "title": "English Vocabulary",
+      "icon": "📚",
+      "questions": [
+        { "id":1, "question":"What is the synonym of 'Happy'?", "options":["Sad","Angry","Joyful","Tired"], "answer":"Joyful", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Feeling great joy." },
+        { "id":2, "question":"What is the antonym of 'Ancient'?", "options":["Old","Modern","Historic","Vintage"], "answer":"Modern", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Opposite of old." },
+        { "id":3, "question":"Which word is a noun?", "options":["Run","Quickly","Beautiful","Mountain"], "answer":"Mountain", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"A person, place or thing." },
+        { "id":4, "question":"What does 'Benevolent' mean?", "options":["Cruel","Kind and generous","Intelligent","Mysterious"], "answer":"Kind and generous", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Think: charity, goodwill." },
+        { "id":5, "question":"Which sentence uses correct grammar?", "options":["She don't know","They is coming","He runs fast","We was there"], "answer":"He runs fast", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Subject-verb agreement." },
+        { "id":6, "question":"What is a 'Metaphor'?", "options":["A type of rhyme","A direct comparison without like/as","A question","A short story"], "answer":"A direct comparison without like/as", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"Not a simile — no 'like' or 'as'." },
+        { "id":7, "question":"What does the prefix 'Un-' mean?", "options":["Again","Not","Before","After"], "answer":"Not", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Unhappy means not happy." },
+        { "id":8, "question":"Which is the correct spelling?", "options":["Recieve","Recieive","Receive","Receeve"], "answer":"Receive", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"I before E except after C." }
+      ],
+      "nodes": [
+        { "id":1, "title":"Word Launch", "story":"Enter the English galaxy! Start with synonyms.", "question":"What is the synonym of 'Happy'?", "options":["Sad","Angry","Joyful","Tired"], "answer":"Joyful", "points":10, "hint":"Feeling great joy.", "unlocks":"Grammar Zone" },
+        { "id":2, "title":"Grammar Zone", "story":"Navigate the grammar nebula!", "question":"Which word is a noun?", "options":["Run","Quickly","Beautiful","Mountain"], "answer":"Mountain", "points":10, "hint":"A person, place or thing.", "unlocks":"Vocabulary Vault" },
+        { "id":3, "title":"Vocabulary Vault", "story":"Unlock the meaning of difficult words!", "question":"What does 'Benevolent' mean?", "options":["Cruel","Kind and generous","Intelligent","Mysterious"], "answer":"Kind and generous", "points":15, "hint":"Think: charity, goodwill.", "unlocks":"Spelling Star" },
+        { "id":4, "title":"Spelling Star", "story":"Spelling challenge incoming!", "question":"Which is the correct spelling?", "options":["Recieve","Recieive","Receive","Receeve"], "answer":"Receive", "points":15, "hint":"I before E except after C.", "unlocks":"Final Word" },
+        { "id":5, "title":"Final Word", "story":"Last challenge — grammar mastery!", "question":"Which sentence uses correct grammar?", "options":["She don't know","They is coming","He runs fast","We was there"], "answer":"He runs fast", "points":15, "hint":"Subject-verb agreement.", "unlocks":"Victory" }
+      ],
+      "pairs": [
+        { "term":"Synonym",    "definition":"A word with the same meaning" },
+        { "term":"Antonym",    "definition":"A word with the opposite meaning" },
+        { "term":"Noun",       "definition":"A person, place or thing" },
+        { "term":"Verb",       "definition":"An action word" },
+        { "term":"Adjective",  "definition":"A word that describes a noun" },
+        { "term":"Metaphor",   "definition":"Comparison without like or as" },
+        { "term":"Simile",     "definition":"Comparison using like or as" },
+        { "term":"Prefix",     "definition":"Letters added before a root word" }
+      ]
+    },
+    "Geography": {
+      "title": "World Geography",
+      "icon": "🌍",
+      "questions": [
+        { "id":1, "question":"What is the capital of France?", "options":["Berlin","Madrid","Paris","Rome"], "answer":"Paris", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"City of Love." },
+        { "id":2, "question":"Which is the largest ocean?", "options":["Atlantic","Indian","Arctic","Pacific"], "answer":"Pacific", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Covers more than half of Earth's water surface." },
+        { "id":3, "question":"Which country has the most population?", "options":["USA","India","China","Russia"], "answer":"India", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Recently surpassed China." },
+        { "id":4, "question":"What is the longest river in the world?", "options":["Amazon","Congo","Nile","Yangtze"], "answer":"Nile", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Flows through Egypt." },
+        { "id":5, "question":"Which continent is the Sahara Desert in?", "options":["Asia","Australia","South America","Africa"], "answer":"Africa", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"The world's largest hot desert." },
+        { "id":6, "question":"What is the capital of Australia?", "options":["Sydney","Melbourne","Canberra","Brisbane"], "answer":"Canberra", "points":15, "timeLimit":25, "difficulty":"medium", "hint":"Not Sydney — that's a common mistake!" },
+        { "id":7, "question":"Which mountain is the tallest in the world?", "options":["K2","Kangchenjunga","Mount Everest","Lhotse"], "answer":"Mount Everest", "points":10, "timeLimit":30, "difficulty":"easy", "hint":"Located in the Himalayas." },
+        { "id":8, "question":"How many countries are in the United Nations?", "options":["173","183","193","203"], "answer":"193", "points":20, "timeLimit":20, "difficulty":"hard", "hint":"Almost every country on Earth is a member." }
+      ],
+      "nodes": [
+        { "id":1, "title":"Earth Base", "story":"Begin your geography mission! Start with European capitals.", "question":"What is the capital of France?", "options":["Berlin","Madrid","Paris","Rome"], "answer":"Paris", "points":10, "hint":"City of Love.", "unlocks":"Ocean Sector" },
+        { "id":2, "title":"Ocean Sector", "story":"Diving into the world's oceans! Which is the largest?", "question":"Which is the largest ocean?", "options":["Atlantic","Indian","Arctic","Pacific"], "answer":"Pacific", "points":10, "hint":"Covers half of Earth's water.", "unlocks":"Desert Zone" },
+        { "id":3, "title":"Desert Zone", "story":"Crossing the great deserts! Where is the Sahara?", "question":"Which continent is the Sahara Desert in?", "options":["Asia","Australia","South America","Africa"], "answer":"Africa", "points":10, "hint":"Largest hot desert on Earth.", "unlocks":"Mountain Peak" },
+        { "id":4, "title":"Mountain Peak", "story":"Climbing to the summit! What is the tallest mountain?", "question":"Which mountain is the tallest in the world?", "options":["K2","Kangchenjunga","Mount Everest","Lhotse"], "answer":"Mount Everest", "points":10, "hint":"In the Himalayas.", "unlocks":"World Capital" },
+        { "id":5, "title":"World Capital", "story":"Final mission — the tricky capital city question!", "question":"What is the capital of Australia?", "options":["Sydney","Melbourne","Canberra","Brisbane"], "answer":"Canberra", "points":15, "hint":"Not Sydney!", "unlocks":"Victory" }
+      ],
+      "pairs": [
+        { "term":"Equator",    "definition":"Imaginary line around the middle of Earth" },
+        { "term":"Continent",  "definition":"Large landmass on Earth" },
+        { "term":"Peninsula",  "definition":"Land surrounded by water on 3 sides" },
+        { "term":"Longitude",  "definition":"Vertical lines on a map" },
+        { "term":"Latitude",   "definition":"Horizontal lines on a map" },
+        { "term":"Monsoon",    "definition":"Seasonal heavy rainfall" },
+        { "term":"Delta",      "definition":"Where a river meets the sea" },
+        { "term":"Canberra",   "definition":"Capital city of Australia" }
+      ]
+    }
+  },
   "content": {
-    "questions": [
-      {
-        "id": 1,
-        "question": "Who built the Pyramids of Giza?",
-        "options": ["Romans", "Egyptians", "Greeks", "Aztecs"],
-        "answer": "Egyptians",
-        "points": 10,
-        "timeLimit": 30,
-        "difficulty": "easy",
-        "hint": "Think: the Nile delta."
-      },
-      {
-        "id": 2,
-        "question": "Which river was central to Egyptian civilization?",
-        "options": ["Amazon", "Ganges", "Nile", "Mississippi"],
-        "answer": "Nile",
-        "points": 10,
-        "timeLimit": 30,
-        "difficulty": "easy",
-        "hint": "The longest river in Africa."
-      },
-      {
-        "id": 3,
-        "question": "What writing system did ancient Egyptians use?",
-        "options": ["Cuneiform", "Latin", "Sanskrit", "Hieroglyphics"],
-        "answer": "Hieroglyphics",
-        "points": 15,
-        "timeLimit": 25,
-        "difficulty": "medium",
-        "hint": "Picture symbols carved on stone."
-      },
-      {
-        "id": 4,
-        "question": "Which ancient wonder stood in Alexandria?",
-        "options": ["The Colosseum", "The Lighthouse", "The Parthenon", "The Sphinx"],
-        "answer": "The Lighthouse",
-        "points": 15,
-        "timeLimit": 25,
-        "difficulty": "medium",
-        "hint": "It guided ships at sea."
-      },
-      {
-        "id": 5,
-        "question": "Who was the first female Pharaoh of Egypt?",
-        "options": ["Cleopatra", "Nefertiti", "Isis", "Hatshepsut"],
-        "answer": "Hatshepsut",
-        "points": 20,
-        "timeLimit": 20,
-        "difficulty": "hard",
-        "hint": "She ruled during the 18th dynasty."
-      }
-    ]
+    "questions": [],
+    "nodes": [],
+    "pairs": []
   },
   "gameModes": [
-    { "name": "QuestPath",   "bestFor": "History, Science chapters" },
     { "name": "NeuronRush",  "bestFor": "Revision, Recall" },
+    { "name": "QuestPath",   "bestFor": "Story-based learning" },
     { "name": "MirrorMatch", "bestFor": "Vocabulary, Definitions" }
   ]
 }
