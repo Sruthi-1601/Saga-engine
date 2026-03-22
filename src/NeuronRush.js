@@ -1,358 +1,208 @@
-// NeuronRush.js — Game Renderer
-
+// NeuronRush.js — Rapid fire quiz renderer
 import MessageBus from './MessageBus.js';
 
 const NeuronRush = {
-
   timerInterval: null,
   timeLeft: 30,
   timerDuration: 30,
-  configData: null,
 
   init() {
-    MessageBus.on('config:loaded',    (d) => this.onConfigLoaded(d));
-    MessageBus.on('game:start',       (d) => this.onStart(d));
-    MessageBus.on('question:next',    (d) => this.onNext(d));
-    MessageBus.on('answer:correct',   (d) => this.onCorrect(d));
-    MessageBus.on('answer:wrong',     (d) => this.onWrong(d));
-    MessageBus.on('option:highlight', (d) => this.highlightOptions(d));
-    MessageBus.on('game:end',         (d) => this.onEnd(d));
-    MessageBus.on('config:error',     (d) => this.onError(d));
-  },
-
-  onConfigLoaded(config) {
-    this.configData = config;
-    this.renderHome(config);
+    MessageBus.on('game:start',       d => this.onStart(d));
+    MessageBus.on('question:next',    d => { if(d.mode==='NeuronRush'||!d.mode) this.onNext(d); });
+    MessageBus.on('answer:correct',   d => this.onCorrect(d));
+    MessageBus.on('answer:wrong',     d => this.onWrong(d));
+    MessageBus.on('option:highlight', d => this.highlightOptions(d));
   },
 
   onStart(data) {
-    const { state, question } = data;
-    this.timerDuration = question.timeLimit || state.config?.mechanics?.timerSeconds || 30;
-    this.renderGame(state, question);
+    if (data.mode && data.mode !== 'NeuronRush') return;
+    this.timerDuration = data.question.timeLimit || 30;
+    this.render(data.state, data.question);
   },
 
   onNext(data) {
-    const { question, questionNumber, totalQuestions, score, lives, streak } = data;
-    this.timerDuration = question.timeLimit || 30;
-    this.updateTopBar(score, lives, streak);
-    this.updateProgress(questionNumber, totalQuestions);
-    this.updateQuestion(question, questionNumber);
+    this.timerDuration = data.question.timeLimit || 30;
+    this.updateHUD(data.score, data.lives, data.streak,
+                   data.questionNumber, data.totalQuestions);
+    this.updateQuestion(data.question, data.questionNumber, data.totalQuestions);
     this.clearFeedback();
     this.startTimer();
   },
 
   onCorrect(data) {
     this.stopTimer();
-    const msg = data.streak > 2
-      ? `Correct! +${data.pts} pts (streak x${data.streak})`
-      : `Correct! +${data.pts} pts`;
-    this.setFeedback(msg, 'correct');
+    this.animateScore();
+    this.setFeedback(
+      data.streak > 2
+        ? `✦ Correct! +${data.pts} pts — Streak x${data.streak}!`
+        : `✦ Correct! +${data.pts} pts`,
+      'correct'
+    );
   },
 
   onWrong(data) {
     this.stopTimer();
-    const msg = data.timeout
-      ? `Time's up! The answer was: ${data.correctAnswer}`
-      : `Incorrect. The answer was: ${data.correctAnswer}`;
-    this.setFeedback(msg, 'wrong');
+    this.shakeCard();
+    this.setFeedback(
+      data.timeout
+        ? `✕ Time's up! Answer: ${data.correctAnswer}`
+        : `✕ Incorrect. Answer: ${data.correctAnswer}`,
+      'wrong'
+    );
   },
 
-  onEnd(data) {
-    this.stopTimer();
-    this.renderEndScreen(data);
-  },
-
-  onError(data) {
-    document.getElementById('app').innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;
-                  min-height:60vh;flex-direction:column;gap:12px;">
-        <p style="font-size:15px;color:#d85a30;">Config error</p>
-        <p style="font-size:13px;color:#6b6b68;">${data.message}</p>
-      </div>`;
-  },
-
-  // ── HOME SCREEN ──────────────────────────────
-
-  renderHome(config) {
-    const { title, subject, grade, author } = config.metadata;
-    document.getElementById('app').innerHTML = `
-      <div class="home-wrap">
-        <div class="home-header">
-          <div class="home-eyebrow">SAGA Engine &middot; TaPTaP 2026</div>
-          <div class="home-title">Select a <span>game mode</span></div>
-          <div class="home-sub">${title} &middot; ${subject} &middot; Grade ${grade}</div>
-        </div>
-
-        <div class="subject-row">
-          <span class="subject-chip">${config.content.questions.length} questions</span>
-          <span class="subject-chip">Lives: ${config.mechanics.lives}</span>
-          <span class="subject-chip">Adaptive difficulty</span>
-          <span class="subject-chip">Streak bonus</span>
-        </div>
-
-        <div class="modes-label">Available modes</div>
-        <div class="modes-grid">
-          <button class="mode-card" onclick="window.sagaStartGame()">
-            <div class="mode-icon">⚡</div>
-            <div class="mode-info">
-              <div class="mode-name">NeuronRush</div>
-              <div class="mode-desc">Rapid-fire timed Q&amp;A — beat the clock, build your streak</div>
-            </div>
-            <span class="mode-badge badge-ready">Ready</span>
-          </button>
-          <button class="mode-card locked" onclick="window.sagaSelectMode('QuestPath')">
-            <div class="mode-icon">🗺️</div>
-            <div class="mode-info">
-              <div class="mode-name">QuestPath</div>
-              <div class="mode-desc">Story map — answer to unlock the next chapter node</div>
-            </div>
-            <span class="mode-badge badge-soon">Mar 21</span>
-          </button>
-          <button class="mode-card locked" onclick="window.sagaSelectMode('MirrorMatch')">
-            <div class="mode-icon">🃏</div>
-            <div class="mode-info">
-              <div class="mode-name">MirrorMatch</div>
-              <div class="mode-desc">Flip cards and match terms with definitions</div>
-            </div>
-            <span class="mode-badge badge-soon">Mar 21</span>
-          </button>
-        </div>
-
-        <button class="start-btn" onclick="window.sagaStartGame()">
-          Start NeuronRush
-        </button>
-        <div class="home-footer">Built by ${author} &middot; Powered by SAGA Engine</div>
-      </div>`;
-  },
-
-  // ── GAME SCREEN ──────────────────────────────
-
-  renderGame(state, question) {
+  render(state, question) {
     const qNum  = state.currentIndex + 1;
     const total = state.totalQuestions;
-
     document.getElementById('app').innerHTML = `
-      <div class="game-wrap">
-
-        <div class="top-bar">
-          <div>
-            <div class="game-title">${state.config.metadata.title}</div>
-            <div class="game-meta">
-              ${state.config.metadata.subject} &middot;
-              Grade ${state.config.metadata.grade} &middot;
-              NeuronRush
+      <div class="game-wrap fade-in">
+        <div class="hud">
+          <div class="hud-left">
+            <div class="hud-title">${state.config.metadata.title}</div>
+            <div class="hud-meta">NeuronRush &middot; ${state.config.metadata.subject}</div>
+          </div>
+          <div class="hud-center">
+            <div class="score-label">SCORE</div>
+            <div class="score-display" id="score-display">${state.score}</div>
+          </div>
+          <div class="hud-right">
+            <div class="hearts" id="hearts-display">
+              ${this.buildHearts(state.lives, state.config.mechanics.lives||3)}
             </div>
           </div>
-          <div class="stats-row">
-            <span class="stat-chip" id="chip-score">${state.score} pts</span>
-            <span class="stat-chip" id="chip-lives">${state.lives} ${state.lives === 1 ? 'life' : 'lives'}</span>
-            <span class="stat-chip" id="chip-streak">streak</span>
+        </div>
+        <div class="xp-section">
+          <div class="xp-row">
+            <span class="xp-label">XP</span>
+            <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:${Math.round(qNum/total*100)}%"></div></div>
+            <span class="xp-count" id="xp-count">${qNum}/${total}</span>
           </div>
         </div>
-
-        <div class="progress-row">
-          <div class="progress-track">
-            <div class="progress-fill" id="prog-fill"
-                 style="width:${Math.round((qNum / total) * 100)}%"></div>
-          </div>
-          <span class="progress-label" id="prog-label">${qNum} of ${total}</span>
-        </div>
-
-        <div class="timer-wrap">
+        <div class="timer-section">
           <div class="timer-row">
-            <div class="timer-track">
-              <div class="timer-fill" id="timer-fill"
-                   style="width:100%;background:#378add"></div>
-            </div>
-            <span class="timer-lbl" id="timer-label"
-                  style="color:#378add">${this.timerDuration}s</span>
+            <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%;background:#00d4ff"></div></div>
+            <span class="timer-num" id="timer-num" style="color:#00d4ff">${this.timerDuration}s</span>
           </div>
           <div class="timer-meta">
-            <span class="timer-tag">Time remaining</span>
+            <span>TIME REMAINING</span>
+            <div class="streak-badge" id="streak-badge">STREAK: 0</div>
           </div>
         </div>
-
-        <div class="q-card">
-          <div class="q-number" id="q-number">Question ${qNum} of ${total}</div>
-          <div class="q-text"   id="q-text">${question.question}</div>
-          <div class="q-hint"   id="q-hint">
-            <span class="hint-label">Hint &mdash; </span>${question.hint || ''}
+        <div class="q-card" id="q-card">
+          <div class="q-meta">
+            <span class="q-number" id="q-number">QUESTION ${qNum} OF ${total}</span>
+            <span class="q-diff ${this.diffClass(question.difficulty)}" id="q-diff">${(question.difficulty||'easy').toUpperCase()}</span>
           </div>
+          <div class="q-text" id="q-text">${question.question}</div>
+          <div class="q-hint" id="q-hint"><span class="hint-icon">◈</span>${question.hint||''}</div>
         </div>
-
-        <div class="options-grid" id="options-grid">
-          ${this.buildOptions(question)}
-        </div>
-
-        <div class="feedback-bar" id="feedback">Choose the correct answer.</div>
-
+        <div class="options-grid" id="options-grid">${this.buildOptions(question)}</div>
+        <div class="feedback-bar" id="feedback">Choose the correct answer to proceed.</div>
       </div>`;
-
     this.startTimer();
   },
 
-  buildOptions(question) {
-    const keys = ['A', 'B', 'C', 'D'];
-    return question.options.map((opt, i) => `
-      <button class="opt-btn" id="opt-${i}"
-              onclick="window.sagaSubmit('${opt.replace(/'/g, "\\'")}', ${i})">
-        <span class="opt-key">${keys[i]}</span>
-        <span class="opt-text">${opt}</span>
+  buildOptions(q) {
+    return ['A','B','C','D'].map((k,i) => `
+      <button class="opt-btn" id="opt-${i}" onclick="window.sagaSubmit('${q.options[i]?.replace(/'/g,"\\'")}',${i})">
+        <span class="opt-key">${k}</span>
+        <span class="opt-text">${q.options[i]||''}</span>
+        <span class="opt-pts">+${q.points||10}</span>
       </button>`).join('');
   },
 
-  // Highlight chosen + correct + dim others
-  highlightOptions(data) {
-    const { chosenIndex, correctIndex, isCorrect } = data;
+  buildHearts(lives, max) {
+    let h = '';
+    for (let i=0;i<max;i++) h+=`<span class="heart${i>=lives?' lost':''}">♥</span>`;
+    return h;
+  },
 
-    document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  diffClass(d) {
+    return d==='hard'?'diff-hard':d==='medium'?'diff-medium':'diff-easy';
+  },
 
-    // Highlight chosen option
-    if (chosenIndex >= 0) {
-      const chosen = document.getElementById(`opt-${chosenIndex}`);
-      if (chosen) chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  highlightOptions({ chosenIndex, correctIndex, isCorrect }) {
+    document.querySelectorAll('.opt-btn').forEach(b => b.disabled=true);
+    if (chosenIndex>=0) {
+      const b=document.getElementById(`opt-${chosenIndex}`);
+      if(b) b.classList.add(isCorrect?'correct':'wrong');
     }
-
-    // Always show correct answer in green
-    if (!isCorrect && correctIndex >= 0) {
-      const correct = document.getElementById(`opt-${correctIndex}`);
-      if (correct) correct.classList.add('correct');
+    if (!isCorrect && correctIndex>=0) {
+      const b=document.getElementById(`opt-${correctIndex}`);
+      if(b) b.classList.add('correct');
     }
-
-    // Dim all other options
-    for (let i = 0; i < 4; i++) {
-      if (i !== chosenIndex && i !== correctIndex) {
-        const btn = document.getElementById(`opt-${i}`);
-        if (btn) btn.classList.add('dimmed');
+    for(let i=0;i<4;i++){
+      if(i!==chosenIndex&&i!==correctIndex){
+        const b=document.getElementById(`opt-${i}`);
+        if(b) b.classList.add('dimmed');
       }
     }
   },
 
-  // Keep this for backward compat
-  highlightOption(index, type) {
-    const btn = document.getElementById(`opt-${index}`);
-    if (btn) btn.classList.add(type);
+  updateHUD(score, lives, streak, qNum, total) {
+    const sd=document.getElementById('score-display');
+    const hd=document.getElementById('hearts-display');
+    const sb=document.getElementById('streak-badge');
+    const xf=document.getElementById('xp-fill');
+    const xc=document.getElementById('xp-count');
+    const max = window._sagaConfig?.mechanics?.lives||3;
+    if(sd) sd.textContent=score;
+    if(hd) hd.innerHTML=this.buildHearts(lives,max);
+    if(sb){ sb.textContent=`${streak>0?'🔥 ':''}STREAK: ${streak}`; sb.className=`streak-badge${streak>0?' active':''}`; }
+    if(xf) xf.style.width=Math.round(qNum/total*100)+'%';
+    if(xc) xc.textContent=`${qNum}/${total}`;
   },
 
-  updateTopBar(score, lives, streak) {
-    const cs = document.getElementById('chip-score');
-    const cl = document.getElementById('chip-lives');
-    const ck = document.getElementById('chip-streak');
-    if (cs) cs.textContent = `${score} pts`;
-    if (cl) {
-      cl.textContent = `${lives} ${lives === 1 ? 'life' : 'lives'}`;
-      cl.className   = `stat-chip${lives < 2 ? ' warn' : ''}`;
-    }
-    if (ck) {
-      ck.textContent = streak > 0 ? `x${streak} streak` : 'streak';
-      ck.className   = `stat-chip${streak > 2 ? ' hot' : ''}`;
-    }
+  updateQuestion(q, qNum, total) {
+    const qn=document.getElementById('q-number');
+    const qt=document.getElementById('q-text');
+    const qh=document.getElementById('q-hint');
+    const qd=document.getElementById('q-diff');
+    const og=document.getElementById('options-grid');
+    if(qn) qn.textContent=`QUESTION ${qNum} OF ${total}`;
+    if(qt) qt.textContent=q.question;
+    if(qh) qh.innerHTML=`<span class="hint-icon">◈</span>${q.hint||''}`;
+    if(qd){ qd.textContent=(q.difficulty||'easy').toUpperCase(); qd.className=`q-diff ${this.diffClass(q.difficulty)}`; }
+    if(og) og.innerHTML=this.buildOptions(q);
   },
 
-  updateProgress(qNum, total) {
-    const fill  = document.getElementById('prog-fill');
-    const label = document.getElementById('prog-label');
-    if (fill)  fill.style.width  = Math.round((qNum / total) * 100) + '%';
-    if (label) label.textContent = `${qNum} of ${total}`;
+  setFeedback(msg, type) {
+    const fb=document.getElementById('feedback');
+    if(fb){ fb.className=`feedback-bar ${type}`; fb.textContent=msg; }
   },
-
-  updateQuestion(question, qNum) {
-    const qn = document.getElementById('q-number');
-    const qt = document.getElementById('q-text');
-    const qh = document.getElementById('q-hint');
-    const og = document.getElementById('options-grid');
-    if (qn) qn.textContent = `Question ${qNum}`;
-    if (qt) qt.textContent = question.question;
-    if (qh) qh.innerHTML   = `<span class="hint-label">Hint &mdash; </span>${question.hint || ''}`;
-    if (og) og.innerHTML   = this.buildOptions(question);
-  },
-
-  setFeedback(message, type) {
-    const fb = document.getElementById('feedback');
-    if (!fb) return;
-    fb.className   = `feedback-bar ${type}`;
-    fb.textContent = message;
-  },
-
   clearFeedback() {
-    const fb = document.getElementById('feedback');
-    if (fb) {
-      fb.className   = 'feedback-bar';
-      fb.textContent = 'Choose the correct answer.';
-    }
+    const fb=document.getElementById('feedback');
+    if(fb){ fb.className='feedback-bar'; fb.textContent='Choose the correct answer to proceed.'; }
   },
-
-  // ── END SCREEN ───────────────────────────────
-
-  renderEndScreen(data) {
-    const { reason, score, totalQuestions, questionsAnswered } = data;
-    const won = reason === 'completed';
-    document.getElementById('app').innerHTML = `
-      <div class="game-wrap">
-        <div class="end-screen">
-          <div class="end-eyebrow">SAGA Engine &middot; NeuronRush</div>
-          <div class="end-heading">${won ? 'All done!' : 'Game over'}</div>
-          <div class="end-sub">${won
-            ? `You answered all ${totalQuestions} questions.`
-            : `You reached question ${questionsAnswered} of ${totalQuestions}.`
-          }</div>
-          <div class="score-block">
-            <span class="score-label">Final Score</span>
-            <span class="score-value">${score}</span>
-          </div>
-          <div class="end-actions">
-            <button class="btn-primary"
-                    onclick="window.MessageBus.emit('game:restart')">
-              Play again
-            </button>
-            <button class="btn-secondary"
-                    onclick="window.sagaGoHome()">
-              Change mode
-            </button>
-          </div>
-          <div class="end-footer">
-            Powered by SAGA Engine &middot; TaPTaP Hackathon 2026
-          </div>
-        </div>
-      </div>`;
+  animateScore() {
+    const sd=document.getElementById('score-display');
+    if(sd){ sd.classList.remove('bump'); void sd.offsetWidth; sd.classList.add('bump'); }
   },
-
-  // ── TIMER ────────────────────────────────────
+  shakeCard() {
+    const c=document.getElementById('q-card');
+    if(!c) return;
+    c.style.transform='translateX(-6px)';
+    setTimeout(()=>{c.style.transform='translateX(6px)';},80);
+    setTimeout(()=>{c.style.transform='translateX(-4px)';},160);
+    setTimeout(()=>{c.style.transform='translateX(0)';},240);
+  },
 
   startTimer() {
     this.stopTimer();
-    this.timeLeft = this.timerDuration;
-    this.updateTimerUI();
-    this.timerInterval = setInterval(() => {
-      this.timeLeft--;
-      this.updateTimerUI();
-      if (this.timeLeft <= 0) {
-        this.stopTimer();
-        MessageBus.emit('answer:submit', { answer: '__timeout__', optionIndex: -1 });
-      }
-    }, 1000);
+    this.timeLeft=this.timerDuration; this.updateTimerUI();
+    this.timerInterval=setInterval(()=>{
+      this.timeLeft--; this.updateTimerUI();
+      if(this.timeLeft<=0){ this.stopTimer(); MessageBus.emit('answer:submit',{answer:'__timeout__',optionIndex:-1}); }
+    },1000);
   },
-
-  stopTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-  },
-
+  stopTimer() { if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;} },
   updateTimerUI() {
-    const fill  = document.getElementById('timer-fill');
-    const label = document.getElementById('timer-label');
-    const pct   = (this.timeLeft / this.timerDuration) * 100;
-    const color = pct > 60 ? '#378add' : pct > 35 ? '#ef9f27' : '#e24b4a';
-    if (fill) {
-      fill.style.width      = pct + '%';
-      fill.style.background = color;
-    }
-    if (label) {
-      label.textContent = `${this.timeLeft}s`;
-      label.style.color = color;
-    }
+    const f=document.getElementById('timer-fill');
+    const n=document.getElementById('timer-num');
+    const pct=(this.timeLeft/this.timerDuration)*100;
+    const c=pct>60?'#00d4ff':pct>30?'#ffd700':'#ff4466';
+    if(f){f.style.width=pct+'%';f.style.background=c;}
+    if(n){n.textContent=`${this.timeLeft}s`;n.style.color=c;}
   }
 };
 
