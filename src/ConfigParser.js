@@ -1,54 +1,22 @@
-// ConfigParser.js
-// Reads and validates the JSON config file.
-// This is the engine/data boundary —
-// everything above this is data, everything below is engine.
-
+// ConfigParser.js — Reads and validates saga-config.json
 import MessageBus from './MessageBus.js';
 
 const ConfigParser = {
+  required: ['engine', 'mode', 'metadata', 'mechanics', 'content'],
 
-  requiredFields: ['engine', 'mode', 'metadata', 'mechanics', 'content'],
-
-  async load(configPath) {
+  async load(path) {
     try {
-      const response = await fetch(configPath);
-
-      if (!response.ok) {
-        throw new Error(`Could not load config file: ${configPath}`);
-      }
-
-      const config = await response.json();
-      this.validate(config);
-
-      MessageBus.emit('config:loaded', config);
+      console.log('[ConfigParser] Loading:', path);
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(`Cannot load config. Status: ${res.status}`);
+      const config = await res.json();
+      console.log('[ConfigParser] Config loaded OK');
       return config;
-
-    } catch (error) {
-      MessageBus.emit('config:error', { message: error.message });
-      throw error;
+    } catch (err) {
+      console.error('[ConfigParser] Error:', err.message);
+      MessageBus.emit('config:error', { message: err.message });
+      throw err;
     }
-  },
-
-  validate(config) {
-    for (const field of this.requiredFields) {
-      if (!config[field]) {
-        throw new Error(`Missing required field: "${field}"`);
-      }
-    }
-
-    if (config.engine !== 'saga') {
-      throw new Error(`Invalid engine name: "${config.engine}". Must be "saga"`);
-    }
-
-    if (!config.content.questions || config.content.questions.length === 0) {
-      throw new Error('Config must have at least one question');
-    }
-
-    config.content.questions.forEach((q, i) => {
-      if (!q.question) throw new Error(`Question ${i + 1} missing "question" text`);
-      if (!q.options)  throw new Error(`Question ${i + 1} missing "options" array`);
-      if (!q.answer)   throw new Error(`Question ${i + 1} missing "answer"`);
-    });
   }
 };
 
