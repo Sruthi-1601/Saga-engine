@@ -1,7 +1,7 @@
 # SAGA Engine 🎮
 
 ## 🎮 Live Demo
-👉 https://mitrujoy-saga-engine.netlify.app/
+👉 
 
 A JSON-configured web-based learning game engine that transforms 
 any educational content into a playable game — zero code required 
@@ -13,11 +13,18 @@ Built by **Team Mitrujoy** for TaPTaP Hackathon 2026.
 
 ## What is SAGA Engine?
 
-One engine. Infinite subjects. A teacher writes a single config 
-file and the engine generates a fully playable educational game.
+SAGA — Subject Adaptive Game Architecture.
 
-The engine is reusable because every mechanic, theme, adaptive 
-logic, and analytics hook is decoupled via a central Message Bus.
+One engine. Any subject. Any game mode. Instantly.
+
+A teacher writes a single config file — the engine generates 
+a fully playable educational game. The same engine works for 
+History, Science, Maths, English and Geography.
+
+---
+
+## Live Demo
+
 
 ---
 
@@ -25,108 +32,47 @@ logic, and analytics hook is decoupled via a central Message Bus.
 
 1. Clone the repository
    git clone https://github.com/Sruthi-1601/Saga-engine.git
+
 2. Go into the folder
-   cd saga-engine
+   cd Saga-engine
+
 3. Install dependencies
    npm install
+
 4. Start the engine
    npm run dev
+
 5. Open in browser
    http://localhost:5173
 
 ---
 
-## 5 Subjects Available
 
-| Subject     | Questions | Modes Available        |
-|-------------|-----------|------------------------|
-| History     | 8         | All 3 modes            |
-| Science     | 8         | All 3 modes            |
-| Mathematics | 8         | All 3 modes            |
-| English     | 8         | All 3 modes            |
-| Geography   | 8         | All 3 modes            |
+## 7 Game Modes
 
----
+### 📝 Quiz Mode
+| Mode        | Description                     | Status   |
+|-------------|---------------------------------|----------|
+| ⚡ NeuronRush  | Rapid-fire timed Q&A          | ✅ Ready |
+| 🚀 QuestPath   | Space explorer story map      | ✅ Ready |
+| 🃏 MirrorMatch | Flip cards, match pairs       | ✅ Ready |
 
-## Three Game Modes
+### 🎮 Game Mode
+## 🎮 Game Modes
 
-| Mode        | Description                        | Status   |
-|-------------|-------------------------------------|----------|
-| NeuronRush  | Rapid-fire timed Q&A               | Ready ✅ |
-| QuestPath   | Space explorer story map           | Ready ✅ |
-| MirrorMatch | Flip cards, match pairs            | Ready ✅ |
+| Mode            | Description                                  | Status   |
+|-----------------|----------------------------------------------|----------|
+| 🏰 DungeonEscape | Find the path, avoid obstacles, reach goal   | 🟢 Ready  |
+| 🧩 MazeRunner   | Solve the maze and reach the destination     | 🟢 Ready  |
+| ⚔️ SurvivalMode | Avoid enemies and survive as long as possible| 🟢 Ready  |
 
----
 
-## How It Works
 
-1. Engine reads saga-config.json
-2. User selects subject and game mode
-3. Message Bus broadcasts events to all modules
-4. Game Logic, Mechanics, Adaptive Engine run independently
-5. Renderer displays the game in browser
-6. Swapping JSON changes subject, questions and behavior
+## AI Document Scanner
 
----
+Upload any PDF or Word document — AI reads it and 
+generates a complete quiz game automatically.
 
-## JSON Controls Everything
-
-Swapping saga-config.json changes:
-- Subject and questions
-- Number of lives
-- Timer speed per question
-- Streak bonus multiplier
-- Adaptive difficulty
-
-No code changes needed — only JSON.
-
----
-
-## Engine / Data Boundary
-
-saga-config.json     → DATA  (swap to change the game)
-src/ConfigParser.js  → boundary between data and engine
-src/MessageBus.js    → engine event system
-src/GameRuntime.js   → engine state machine
-src/NeuronRush.js    → rapid fire renderer
-src/QuestPath.js     → story map renderer
-src/MirrorMatch.js   → card match renderer
-src/main.js          → engine entry point
-
----
-
-## Folder Structure
-
-saga-engine/
-├── public/
-│   └── saga-config.json
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── main.js
-    ├── MessageBus.js
-    ├── ConfigParser.js
-    ├── GameRuntime.js
-    ├── NeuronRush.js
-    ├── QuestPath.js
-    └── MirrorMatch.js
-
----
-
-## Tech Stack
-
-| Layer            | Technology         |
-|------------------|--------------------|
-| Frontend         | Vanilla JavaScript |
-| Game Engine      | Custom JS Modules  |
-| Message Bus      | Custom Pub/Sub     |
-| Config           | JSON               |
-| Build Tool       | Vite               |
-| Hosting          | Netlify            |
-
----
-
-## Team Mitrujoy
-
-Built for TaPTaP Platform — Ed-Tech Hackathon 2026
+- Powered by Groq AI (llama-3.3-70b-versatile)
+- Generates 8 quality questions from any document
+- Works for all 7 game modes instantly
